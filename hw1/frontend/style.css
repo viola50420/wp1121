@@ -1,0 +1,52 @@
+body {
+  background-color: #f4f3e1;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 15vh;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#diary-list, #diary-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.diary-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px;
+  max-width: 300px;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.edit-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+
+.diary-card:hover {
+  background-color: #f0f0f0;
+}
+
+.diary-content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

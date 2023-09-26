@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>todo list</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="edit.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"
+      integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+<body>
+    <h1>Edit Diary</h1>
+    
+    <form id="edit-diary-form">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br><br>   
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="4" cols="50" required></textarea><br><br>
+        <label for="mood">Mood:</label>
+        <select id="mood" name="mood">
+            <option value="happy">Happy</option>
+            <option value="sad">Sad</option>
+            <option value="angry">Angry</option>
+        </select><br><br>
+        </form>
+      <button id="enter-button" tabindex="3" type="button" >send</button>
+
+ 
+</body>
+</html>

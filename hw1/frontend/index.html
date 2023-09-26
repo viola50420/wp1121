@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>todo list</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="index.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js"
+      integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <header>
+        <h1>My Dairy</h1>
+    </header>
+    <!-- <div id="add-dairy">
+      <input type="text" id="title-input" placeholder="new diary" tabindex="1" />
+      <button id="diary-add" tabindex="3">add</button>
+    </div>
+    <input type="text" id="content-input" placeholder="content" tabindex="1" /> -->
+    <button id="diary-add" tabindex="3">new diary</button>
+
+    <section id="diary-list">
+    </section>
+    <section id="diary-details" stxyle="display:none;">
+  
+    </section>
+    <section id="diary-edit-details" stxyle="display:none;">
+  
+    </section>
+
+</body>
+<template id="diary-card-template">
+  <div class="diary-card">
+    <h3></h3>
+    <div class="diary-tag"></div>
+    <div class="diary-content"></div>
+    <button class="edit-button">編輯</button>
+  </div>
+</template>
+
+</html>

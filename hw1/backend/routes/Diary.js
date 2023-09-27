@@ -3,7 +3,6 @@ import {
   getDiarys,
   updateDiary,
   deleteTodo,
-  getDiary 
 } from "../controllers/Diary.js";
 import express from "express";
 

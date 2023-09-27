@@ -1,8 +1,3 @@
-const diaryData = [
-  { id: 1, title: "第一篇日記", content: "今天天氣真好", mood:"happy" },
-  { id: 2, title: "第二篇日記", content: "Hello!" , mood:"happy"},
-  { id: 3, title: "第三篇日記", content: "Hello it's me", mood:"happy"}
-];
 
 const diaryListContainer = document.getElementById('diary-list');
 const diaryDetailsContainer = document.getElementById('diary-details');

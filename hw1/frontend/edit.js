@@ -2,7 +2,6 @@
 const instance = axios.create({
     baseURL: "http://localhost:8000/api",
   });
-// const diaryId = window.diaryId;
 const enterButton = document.querySelector("#enter-button");
 const cancelButton = document.querySelector("#cancel-button");
 
@@ -51,5 +50,5 @@ enterButton.addEventListener("click", async () => {
 cancelButton.addEventListener("click", async () => {
   
   window.location.href = `index.html`;
-  
+
 });

@@ -1,9 +1,10 @@
 import {
   createDiary,
   getDiarys,
-  updateTodo,
+  updateDiary,
   deleteTodo,
-} from "../controllers/todo.js";
+  getDiary 
+} from "../controllers/Diary.js";
 import express from "express";
 
 // Create an express router
@@ -14,10 +15,12 @@ const router = express.Router();
 
 // GET /api/todos
 router.get("/",  getDiarys);
+
 // POST /api/todos
+
 router.post("/", createDiary);
 // PUT /api/todos/:id
-router.put("/:id", updateTodo);
+router.put("/:id", updateDiary);
 // DELETE /api/todos/:id
 router.delete("/:id", deleteTodo);
 

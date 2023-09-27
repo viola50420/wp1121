@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 // Create a schema
-const todoSchema = new mongoose.Schema(
+const DiarySchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -11,10 +11,14 @@ const todoSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // completed: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+   mood:{
+    type: String,
+    required: false,
+   },
+   tag:{
+    type: String,
+    required: false,
+   }
   },
   // The second argument is an options object.
   // In this case, we want to rename _id to id and remove __v
@@ -34,6 +38,6 @@ const todoSchema = new mongoose.Schema(
 );
 
 // Create a model
-const TodoModel = mongoose.model("Todo", todoSchema);
+const DiaryModel = mongoose.model("Diary", DiarySchema);
 
-export default TodoModel;
+export default DiaryModel;

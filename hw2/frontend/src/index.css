@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.list-button {
+    background: transparent;
+    border: none;
+    text-align: left;
+    letter-spacing: 1px;
+  }
+  .hidden {
+    display: none;
+  }

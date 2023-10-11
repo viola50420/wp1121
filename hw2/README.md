@@ -1,4 +1,6 @@
-# 112-1-unit1-trello-clone
+## not finished
+
+同學我沒寫完，太難了，我好累，我只完成了刪除功能，兩位自由心證吧
 
 ## Run the app
 

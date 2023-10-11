@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import { Album as AlbumIcon } from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Add as AddIcon } from "@mui/icons-material";
 import { Button, Container } from "@mui/material";
+
+
 
 import CardList from "@/components/CardList";
 import HeaderBar from "@/components/HeaderBar";
@@ -19,7 +18,7 @@ import CardDetail from './components/CardDetail';
 function App() {
   const { lists, fetchLists, fetchCards } = useCards();
   const [newListDialogOpen, setNewListDialogOpen] = useState(false);
-  const [DeleteMode, setDeleteMode] = useState(false);
+  const [DeleteMode, setDeleteMode] = useState(-1);
   const [windowopen, setwindowopen] = useState(false);
   const [whichwindow, setwhichwindow] = useState("");
   
@@ -27,7 +26,11 @@ function App() {
     fetchLists();
     fetchCards();
   }, [fetchCards, fetchLists]);
-
+ 
+  const switchMode = () => {
+    const newState = DeleteMode * (-1);
+    setDeleteMode(newState);
+  }
 
   function getIndex()
   {
@@ -57,26 +60,32 @@ function App() {
           Add
         </Button>
 
-        <Button
-          variant="contained"
-          style={{ width: '100%' }}
-          className="w-80 md:w-auto"
-          onClick={() => DeleteMode(true)}
-        >
-          <AddIcon className="mr-2" />
-          Delete
-        </Button>
+        <Button 
+         variant="contained"
+         style={{ width: '100%' }}
+         className="w-80 md:w-auto"
+        onClick={switchMode}>
+                  { (DeleteMode === 1) ? (
+                    <>
+                      Done
+                    </> 
+                  ) : (
+                    <>
+                    
+                    Delete
+                  </>
+                  )}
+                </Button>
                 
       </div>
     </div>
     <Container columnGap={"7%"} rowGap={'5%'} justifyContent={"space-between"}  sx={{ mr: 10, ml:10, mt:5}}>
     {/* <div className="flex flex-row w-full lg:w-full mt-6 lg:mt-0"> */}
-      {lists.map((list) => (
-          <button onClick={() => {setwindowopen(true);setwhichwindow(list.id);}} style={{background: "transparent", border: "none", textAlign:"left", letterSpacing:1}}>
-
-        <CardList key={list.id} {...list} />
-        </button>
-      ))}
+    {lists.map((list) => (
+    <button key={list.id} onClick={() => {setwindowopen(true);setwhichwindow(list.id);}} style={{background: "transparent", border: "none", textAlign:"left", letterSpacing:1}}>
+        <CardList {...list} isdeleteMode ={DeleteMode} />
+    </button>
+))}
       </Container>
    
      

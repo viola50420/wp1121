@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 
-import AddIcon from "@mui/icons-material/Add";
+
 import DeleteIcon from "@mui/icons-material/Delete";
-import Button from "@mui/material/Button";
+
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
@@ -13,17 +13,19 @@ import Typography from "@mui/material/Typography";
 import useCards from "@/hooks/useCards";
 import { deleteList, updateList } from "@/utils/client";
 
-import Card from "./Card";
+
 import type { CardProps } from "./Card";
 import CardDialog from "./CardDialog";
 
 export type CardListProps = {
   id: string;
   name: string;
-  cards: CardProps[];
+  cards: CardProps[];  
+  isdeleteMode: number;
+
 };
 
-export default function CardList({ id, name, cards }: CardListProps) {
+export default function CardList({ id, name,  isdeleteMode  }: CardListProps) {
   const [openNewCardDialog, setOpenNewCardDialog] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const { fetchLists } = useCards();
@@ -79,24 +81,25 @@ export default function CardList({ id, name, cards }: CardListProps) {
             </button>
           )}
           <div className="grid place-items-center">
-            <IconButton color="error" onClick={handleDelete}>
-              <DeleteIcon />
-            </IconButton>
+        
+            {(isdeleteMode === 1) ? (
+                  <IconButton 
+                  color="error" 
+                  onClick={() => {
+                    handleDelete();
+                    window.location.reload();
+                  }} 
+                  style={{zIndex: 3}}
+                >
+                        <DeleteIcon/>
+                      </IconButton>
+                  ) : (
+                    <></>
+                  )}
           </div>
         </div>
         <Divider variant="middle" sx={{ mt: 1, mb: 2 }} />
-        {/* <div className="flex flex-col gap-4">
-          {cards.map((card) => (
-            <Card key={card.id} {...card} />
-          ))}
-          <Button
-            variant="contained"
-            onClick={() => setOpenNewCardDialog(true)}
-          >
-            <AddIcon className="mr-2" />
-            Add a card
-          </Button>
-        </div> */}
+
       </Paper>
       <CardDialog
         variant="new"

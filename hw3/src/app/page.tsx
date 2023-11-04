@@ -6,6 +6,8 @@ import TweetInput from "@/components/TweetInput";
 import HomePageTop from "@/components/HomePageTop";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
+import SearchBar from "@/components/SearchBar";
+
 import { likesTable, tweetsTable, usersTable } from "@/db/schema";
 
 type HomePageProps = {
@@ -138,7 +140,9 @@ export default async function Home({
     .execute();
 
       
-    
+    const [search, setSearch] = typeof window !== 'undefined' ? React.useState(""): [(""), () => null]
+    // const [search, setSearch] = useState("");
+    console.log("search: ", search)
     
   return (
     <>
@@ -148,9 +152,13 @@ export default async function Home({
           <TweetInput />
       </div> */}
       <HomePageTop className="mb-4" />
+      <div className="flex justify-center">
+
+      <SearchBar />
+      </div>
       {/* <Separator /> */}
-      {tweets.map((tweet) => (
-        <Tweet
+      {tweets.filter((tweet) => (tweet.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()))).map((tweet) => (
+         <Tweet       
           key={tweet.id}
           id={tweet.id}
           username={username}

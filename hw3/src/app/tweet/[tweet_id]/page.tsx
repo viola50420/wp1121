@@ -20,6 +20,7 @@ import { likesTable, tweetsTable, usersTable } from "@/db/schema";
 import { getAvatar } from "@/lib/utils";
 import Reply from "@/components/reply";
 
+
 type TweetPageProps = {
   params: {
     // this came from the file name: [tweet_id].tsx
@@ -200,8 +201,10 @@ export default async function TweetPage({
       hour: "numeric",
 
     });
-    
-    
+  
+    const [search, setSearch] = typeof window !== 'undefined' ? React.useState(""): [(""), () => null]
+    // const [search, setSearch] = useState("");
+    console.log("search: ", search, ".")
   return (
     <>
    <div className="flex h-screen w-full flex-col overflow-scroll pt-2">

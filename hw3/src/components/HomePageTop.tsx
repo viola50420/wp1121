@@ -69,23 +69,6 @@ export default function HomePageTop() {
     setShowModal(false);
   };
 
-	const handlesearch = () => {
-    var keyword = keywordInputRef.current?.value;   
-		if(!keyword){
-			keyword = "";
-  
-		}
-
-    const params = new URLSearchParams(searchParams);
-    params.set("keyword", keyword!);
-    router.push(`${pathname}?${params.toString()}`);
-    const searchedTweets = searchTweets(keyword);
-    setSearchedTweets(searchedTweets);
-    console.log(searchedTweets);
-    return true;
-   //還沒好
-
-  };
 
   return (
 <div className="flex flex-col items-center mt-4">
@@ -98,7 +81,7 @@ export default function HomePageTop() {
    
   </div>
   <div className="flex items-center mb-2 justify-center">
-    <input
+    {/* <input
       type="text"
       placeholder="搜尋活動"
       className="mr-2 p-2 border border-gray-300 rounded"
@@ -110,7 +93,7 @@ export default function HomePageTop() {
       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
     >
       搜尋活動
-    </button>
+    </button> */}
     <button
       onClick={handleAddActivityClick}
       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

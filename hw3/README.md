@@ -1,4 +1,5 @@
 # 112-1-unit2-twitter-clone
+搜尋功能做不出來...齊他應該都有
 
 See the live demo here: [https://112-1-unit2-twitter-clone.vercel.app/](https://112-1-unit2-twitter-clone.vercel.app/)
 If you have any questions about this repo, feel free to open an issue on this repo or contact me at [eewebprogramming@googlegroups.com](mailto:eewebprogramming@googlegroups.com?subject=twitter-clone%20question)

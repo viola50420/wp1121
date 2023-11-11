@@ -1,3 +1,5 @@
+import { useServer } from "@blitzjs/core/server"
+
 import { eq, desc, isNull, sql } from "drizzle-orm";
 
 import NameDialog from "@/components/NameDialog";
@@ -144,6 +146,7 @@ export default async function Home({
     // const [search, setSearch] = useState("");
     console.log("search: ", search)
     
+const setSearchServer = useServer(setSearch)
   return (
     <>
    <div className="flex h-screen w-full flex-col overflow-scroll pt-2">
@@ -154,8 +157,8 @@ export default async function Home({
       <HomePageTop className="mb-4" />
       <div className="flex justify-center">
 
-      <SearchBar />
-      </div>
+      <SearchBar setSearch={setSearch} />
+            </div>
       {/* <Separator /> */}
       {tweets.filter((tweet) => (tweet.content.toLocaleLowerCase().includes(search.toLocaleLowerCase()))).map((tweet) => (
          <Tweet       

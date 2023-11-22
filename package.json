@@ -1,6 +1,22 @@
 {
   "dependencies": {
+    "drizzle-orm": "^0.29.0",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.3.0",
+    "react-router-dom": "^6.19.0",
     "rf": "^0.0.1",
     "rm": "^0.1.8"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/pg": "^8.10.9",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "drizzle-kit": "^0.20.4",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.1.0",
+    "prettier-plugin-tailwindcss": "^0.5.7",
+    "typescript": "^5.2.2"
   }
 }

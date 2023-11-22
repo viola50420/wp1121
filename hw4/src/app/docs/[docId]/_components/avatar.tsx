@@ -1,6 +1,5 @@
 import React from "react";
 
-
 type Props = {
   displayId: User["displayId"];
   classname?: string;
@@ -9,9 +8,9 @@ type Props = {
 function Avatar({ displayId, classname }: Props) {
   return (
     <div
-      className={`rounded-full flex items-center justify-center ${classname}`}
+      className={`flex items-center justify-center rounded-full ${classname}`}
     >
-      <span className="font-semibold text-sm">
+      <span className="text-sm font-semibold">
         {/* The first letter of text */}
         {displayId.charAt(0).toUpperCase()}
       </span>

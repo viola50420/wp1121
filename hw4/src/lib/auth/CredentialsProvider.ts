@@ -12,13 +12,10 @@ export default CredentialsProvider({
   credentials: {
     email: { label: "Email", type: "text" },
     username: { label: "Userame", type: "text", optional: true },
-    password: { label: "Password", type: "password" },
   },
   async authorize(credentials) {
     let validatedCredentials: {
       email: string;
-      username?: string;
-      password: string;
     };
 
     try {
@@ -27,55 +24,50 @@ export default CredentialsProvider({
       console.log("Wrong credentials. Try again.");
       return null;
     }
-    const { email, username, password } = validatedCredentials;
+    const { email } = validatedCredentials;
 
     const [existedUser] = await db
       .select({
         id: usersTable.displayId,
-        username: usersTable.username,
         email: usersTable.email,
-        hashedPassword: usersTable.hashedPassword,
+        // hashedPassword: usersTable.hashedPassword,
       })
       .from(usersTable)
       .where(eq(usersTable.email, validatedCredentials.email.toLowerCase()))
       .execute();
     if (!existedUser) {
       // Sign up
-      if (!username) {
-        console.log("Name is required.");
-        return null;
-      }
-      const hashedPassword = await bcrypt.hash(password, 10);
+      // if (!username) {
+      //   console.log("Name is required.");
+      //   return null;
+      // }
       const [createdUser] = await db
         .insert(usersTable)
         .values({
-          username,
           email: email.toLowerCase(),
-          hashedPassword,
         })
         .returning();
       return {
         email: createdUser.email,
-        name: createdUser.username,
         id: createdUser.displayId,
       };
     }
 
-    // Sign in
+    //Sign in
 
-    if (!existedUser.hashedPassword) {
-      console.log("The email has registered with social account.");
-      return null;
-    }
+    // if (!existedUser.hashedPassword) {
+    //   console.log("The email has registered with social account.");
+    //   return null;
+    // }
 
-    const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
-    if (!isValid) {
-      console.log("Wrong password. Try again.");
-      return null;
-    }
+    // const isValid = await bcrypt.compare(password, existedUser.hashedPassword);
+    // if (!isValid) {
+    //   console.log("Wrong password. Try again.");
+    //   return null;
+    // }
     return {
       email: existedUser.email,
-      name: existedUser.username,
+      // name: existedUser.username,
       id: existedUser.id,
     };
   },

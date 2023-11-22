@@ -15,9 +15,9 @@ import AuthInput from "./AuthInput";
 
 function AuthForm() {
   const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [username, setUsername] = useState<string>("123");
+  // const [password, setPassword] = useState<string>("");
+  // const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [isSignUp, setIsSignUp] = useState<boolean>(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,8 +25,7 @@ function AuthForm() {
     // TODO: sign in logic
     signIn("credentials", {
       email,
-      username,
-      password,
+
       callbackUrl: `${publicEnv.NEXT_PUBLIC_BASE_URL}/docs`,
     });
   };
@@ -38,33 +37,33 @@ function AuthForm() {
       <CardContent className=" flex flex-col gap-2">
         <form onSubmit={handleSubmit} className="flex flex-col gap-2">
           <AuthInput
-            label="Email"
-            type="email"
+            label="name"
+            type="text"
             value={email}
             setValue={setEmail}
           />
-          {isSignUp && (
+          {/* {isSignUp && (
             <AuthInput
               label="Username"
               type="text"
               value={username}
               setValue={setUsername}
             />
-          )}
-          <AuthInput
+          )} */}
+          {/* <AuthInput
             label="Password"
             type="password"
             value={password}
             setValue={setPassword}
-          />
-          {isSignUp && (
+          /> */}
+          {/* {isSignUp && (
             <AuthInput
               label="Confirm Password"
               type="password"
               value={confirmPassword}
               setValue={setConfirmPassword}
             />
-          )}
+          )} */}
           <div className="text-sm text-gray-500">
             {isSignUp ? (
               <span>
@@ -95,11 +94,9 @@ function AuthForm() {
         </form>
         <div className="flex w-full items-center gap-1 py-2">
           <div className="h-[1px] grow border-t"></div>
-          <p className="text-xs text-gray-400">or</p>
+          {/* <p className="text-xs text-gray-400">or</p> */}
           <div className="h-[1px] grow border-t"></div>
         </div>
-
-  
       </CardContent>
     </Card>
   );

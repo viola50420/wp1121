@@ -1,4 +1,4 @@
-import { useEffect, useMemo,useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
@@ -24,6 +24,8 @@ export const useDocument = () => {
   const [debouncedDocument] = useDebounce(document, debounceMilliseconds);
   const [debouncedDbDocument] = useDebounce(dbDocument, debounceMilliseconds);
   const [Message, setMessage] = useState<string>(""); // 新增這一行
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+
   const router = useRouter();
 
   const { data: session } = useSession();
@@ -33,8 +35,8 @@ export const useDocument = () => {
   const isSynced = useMemo(() => {
     if (debouncedDocument === null || debouncedDbDocument === null) return true;
     return (
-        debouncedDocument.title === debouncedDbDocument.title &&
-        debouncedDocument.content === debouncedDbDocument.content
+      debouncedDocument.title === debouncedDbDocument.title &&
+      debouncedDocument.content === debouncedDbDocument.content
     );
   }, [debouncedDocument, debouncedDbDocument]);
 
@@ -46,7 +48,7 @@ export const useDocument = () => {
   //              This useEffect will trigger twice: one when dbDocument is updated and another when debouncedDocument is updated.
   //              However, the two updates PUTs sends conflicting pusher events to the other clients, causing the document to twitch indefinitely.
   useEffect(() => {
-    // [NOTE] 2023.11.18 - If either of the debounced value is null, then `isSynced` must be true. 
+    // [NOTE] 2023.11.18 - If either of the debounced value is null, then `isSynced` must be true.
     //                     Therefore, we don't need to explicitly check for their null values.
     if (isSynced) return;
 
@@ -84,15 +86,18 @@ export const useDocument = () => {
 
     try {
       const channel = pusherClient.subscribe(channelName);
-      channel.bind("doc:update", ({ senderId, document: received_document }: PusherPayload) => {
-        if (senderId === userId) {
-          return;
-        }
-        // [NOTE] 2023.11.18 - This is the pusher event that updates the dbDocument.
-        setDocument(received_document);
-        setDbDocument(received_document);
-        router.refresh();
-      });
+      channel.bind(
+        "doc:update",
+        ({ senderId, document: received_document }: PusherPayload) => {
+          if (senderId === userId) {
+            return;
+          }
+          // [NOTE] 2023.11.18 - This is the pusher event that updates the dbDocument.
+          setDocument(received_document);
+          setDbDocument(received_document);
+          router.refresh();
+        },
+      );
     } catch (error) {
       console.error(error);
       router.push("/docs");
@@ -105,20 +110,18 @@ export const useDocument = () => {
   }, [documentId, router, userId]);
 
   useEffect(() => {
-    if (!documentId) return;
-    const fetchDocument = async () => {
+    const fetchChatMessages = async () => {
       const res = await fetch(`/api/documents/${documentId}`);
       if (!res.ok) {
-        setDocument(null);
-        router.push("/docs");
+        setChatMessages([]); // 如果沒有數據，設置為空數組
         return;
       }
       const data = await res.json();
-      setDocument(data);
-      setDbDocument(data);
+      setChatMessages(data);
     };
-    fetchDocument();
-  }, [documentId, router]);
+
+    fetchChatMessages();
+  }, [documentId]);
 
   const title = document?.title || "";
   const setTitle = (newTitle: string) => {
@@ -137,12 +140,15 @@ export const useDocument = () => {
       content: newContent,
     });
   };
-  
+
   const saveMessage = async () => {
-    if (!debouncedDocument || !debouncedDocument.content || !userId) {
+    if (!Message || !userId) {
       console.error("Invalid message content or user ID");
       return;
     }
+
+    // Directly use the session's user email
+    const userEmail = session?.user?.email;
 
     const res = await fetch(`/api/documents/${documentId}`, {
       method: "POST",
@@ -150,7 +156,8 @@ export const useDocument = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        content: debouncedDocument.content,
+        content: Message,
+        sender: userEmail, // Include the sender's email
         userId,
         documentId,
       }),
@@ -158,10 +165,10 @@ export const useDocument = () => {
 
     if (res.ok) {
       console.log("Message saved successfully");
-      // 可以在這裡添加其他處理成功時的邏輯
+      // Add any additional logic for a successful save here
     } else {
       console.error("Failed to save message");
-      // 可以在這裡添加其他處理失敗時的邏輯
+      // Add any additional logic for a failed save here
     }
   };
 
@@ -172,10 +179,9 @@ export const useDocument = () => {
     setTitle,
     content,
     setContent,
-    Message, 
+    Message,
+    chatMessages,
     setMessage,
     saveMessage,
   };
-
-  
 };

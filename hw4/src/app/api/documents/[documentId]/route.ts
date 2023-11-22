@@ -4,27 +4,44 @@ import { and, eq } from "drizzle-orm";
 import Pusher from "pusher";
 
 import { db } from "@/db";
-import { documentsTable, usersToDocumentsTable, messagesTable } from "@/db/schema";
+import {
+  documentsTable,
+  usersToDocumentsTable,
+  messagesTable,
+} from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { privateEnv } from "@/lib/env/private";
 import { publicEnv } from "@/lib/env/public";
 import { updateDocSchema } from "@/validators/updateDocument";
 
+type InsertMessageValues = {
+  content: string;
+  documentId: string;
+  sender: string;
+};
 
-export async function POST(req: NextRequest, { params }: { params: { documentId: string } }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { documentId: string } },
+) {
   try {
     // 解析請求主體
     const reqBody = await req.json();
-    
-    // 您可以在這裡添加必要的驗證邏輯
 
-    // 將數據插入消息表
+    // 取得目前登入的使用者
+    const session = await auth();
+    if (!session || !session?.user?.id) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const userId = session.user.id;
+
+    // 將數據插入消息表，確保包含 sender 欄位
     const insertedMessage = await db
       .insert(messagesTable)
       .values({
         content: reqBody.content,
         documentId: params.documentId,
-        // 其他字段，根據您的數據庫結構添加
+        sender: userId, // 使用目前登入使用者的 ID 作為 sender
       })
       .returning();
 
@@ -32,10 +49,12 @@ export async function POST(req: NextRequest, { params }: { params: { documentId:
     return NextResponse.json(insertedMessage, { status: 201 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }
-
 // GET /api/documents/:documentId
 export async function GET(
   req: NextRequest,
@@ -48,42 +67,23 @@ export async function GET(
   },
 ) {
   try {
-    // Get user from session
+    // 取得來自 session 的使用者
     const session = await auth();
     if (!session || !session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
     const userId = session.user.id;
 
-    // Get the document
-    const dbDocument = await db.query.usersToDocumentsTable.findFirst({
-      where: and(
-        eq(usersToDocumentsTable.userId, userId),
-        eq(usersToDocumentsTable.documentId, params.documentId),
-      ),
-      with: {
-        document: {
-          columns: {
-            displayId: true,
-            title: true,
-            content: true,
-          },
-        },
-      },
-    });
-    if (!dbDocument?.document) {
-      return NextResponse.json({ error: "Doc Not Found" }, { status: 404 });
-    }
-
-    const document = dbDocument.document;
-    return NextResponse.json(
-      {
-        id: document.displayId,
-        title: document.title,
-        content: document.content,
-      },
-      { status: 200 },
-    );
+    // 取得指定 documentId 的所有消息
+    const messages = await db
+      .select({
+        documentId: messagesTable.documentId,
+        content: messagesTable.content,
+      })
+      .from(messagesTable)
+      .where(and(eq(messagesTable.documentId, params.documentId)));
+    console.log(messages);
+    return NextResponse.json(messages, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       {
@@ -95,7 +95,6 @@ export async function GET(
     );
   }
 }
-
 // PUT /api/documents/:documentId
 export async function PUT(
   req: NextRequest,

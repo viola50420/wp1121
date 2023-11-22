@@ -61,7 +61,7 @@ async function ShareDialog({ docId }: Props) {
             <form key={index} className="flex w-full items-center gap-2">
               <RxAvatar size={30} />
               <div className="flex grow flex-col ">
-                <h2 className="text-sm font-semibold">{author.username}</h2>
+                {/* <h2 className="text-sm font-semibold">{author.username}</h2> */}
                 <p className="text-xs text-gray-600">{author.email}</p>
               </div>
             </form>

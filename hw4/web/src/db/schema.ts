@@ -17,15 +17,8 @@ export const usersTable = pgTable(
   {
     id: serial("id").primaryKey(),
     displayId: uuid("display_id").defaultRandom().notNull().unique(),
-    // username: varchar("username", { length: 100 }),
-    email: varchar("email", { length: 100 }).notNull().unique(),
-    // hashedPassword: varchar("hashed_password", { length: 100 }),
-    // provider: varchar("provider", {
-    //   length: 100,
-    //   enum: [ "credentials"],
-    // })
-    //   .notNull()
-    //   .default("credentials"),
+    username: varchar("username", { length: 100 }),
+    email: varchar("email", { length: 100 }).notNull(),
   },
   (table) => ({
     displayIdIndex: index("display_id_index").on(table.displayId),
@@ -81,22 +74,6 @@ export const usersToDocumentsTable = pgTable(
     uniqCombination: unique().on(table.documentId, table.userId),
   }),
 );
-
-export const usersToDocumentsRelations = relations(
-  usersToDocumentsTable,
-  ({ one }) => ({
-    document: one(documentsTable, {
-      fields: [usersToDocumentsTable.documentId],
-      references: [documentsTable.displayId],
-    }),
-    user: one(usersTable, {
-      fields: [usersToDocumentsTable.userId],
-      references: [usersTable.displayId],
-    }),
-  }),
-);
-
-// 新增 "messages" 表格
 export const messagesTable = pgTable(
   "messages",
   {
@@ -114,8 +91,20 @@ export const messagesTable = pgTable(
     documentIndex: index("document_index").on(table.documentId),
   }),
 );
+export const usersToDocumentsRelations = relations(
+  usersToDocumentsTable,
+  ({ one }) => ({
+    document: one(documentsTable, {
+      fields: [usersToDocumentsTable.documentId],
+      references: [documentsTable.displayId],
+    }),
+    user: one(usersTable, {
+      fields: [usersToDocumentsTable.userId],
+      references: [usersTable.displayId],
+    }),
+  }),
+);
 
-// 新增 "messages" 與 "documents" 之間的關聯
 export const messagesToDocumentsTable = pgTable(
   "messages_to_documents",
   {
@@ -150,11 +139,11 @@ export const messagesToDocumentsRelations = relations(
   ({ one }) => ({
     message: one(messagesTable, {
       fields: [messagesToDocumentsTable.messageId],
-      references: [messagesTable.id],
+      references: [messagesTable.id], // 將 displayId 改為 id
     }),
     document: one(documentsTable, {
       fields: [messagesToDocumentsTable.documentId],
-      references: [documentsTable.id],
+      references: [documentsTable.id], // 將 displayId 改為 id
     }),
   }),
 );

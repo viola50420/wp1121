@@ -11,7 +11,7 @@ export const {
   handlers: { GET, POST },
   auth,
 } = NextAuth({
-  providers: [ CredentialsProvider],
+  providers: [CredentialsProvider],
   callbacks: {
     async session({ session, token }) {
       const email = token.email || session?.user?.email;
@@ -19,7 +19,6 @@ export const {
       const [user] = await db
         .select({
           id: usersTable.displayId,
-          username: usersTable.username,
           email: usersTable.email,
         })
         .from(usersTable)
@@ -30,7 +29,6 @@ export const {
         ...session,
         user: {
           id: user.id,
-          username: user.username,
           email: user.email,
         },
       };
@@ -39,8 +37,8 @@ export const {
       // Sign in with social account, e.g. GitHub, Google, etc.
       if (!account) return token;
       const { name, email } = token;
-    
-      if (!name || !email ) return token;
+
+      if (!name || !email) return token;
 
       // Check if the email has been registered
       const [existedUser] = await db

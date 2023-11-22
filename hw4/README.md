@@ -1,5 +1,10 @@
 # Run the project
 
+
+我連註冊都搞不定，我好累我要放棄了orz
+如果同學有興趣可以在DB建一筆有email的資料用他當username進去看我的ui (不用用email的格式)，但反正裡面其實也一樣爛。
+
+
 1. Install dependencies
    ```bash
    yarn

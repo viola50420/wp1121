@@ -22,6 +22,10 @@ export async function getProject(projectId: string) {
     // TODO: 8. Select the correct project by userId and projectId
 
     // TODO: 8. end
+    where: and(
+      eq(usersToProjectsTable.userId, userId),
+      eq(usersToProjectsTable.projectId, projectId),
+    ),
     columns: {},
     with: {
       project: {
@@ -100,7 +104,14 @@ export async function updateTaskComplete(
   });
 
   // TODO: 9. Update the task's `completed` column
-
+  const parsedTaskId = parseInt(taskId, 10); 
+  await db
+    .update(tasksTable)
+    .set({
+      completed: completed,
+    })
+    .where(eq(tasksTable.id, parsedTaskId))
+    .returning();
   // TODO: 9. end
 
   revalidatePath(`/projects/${projectId}`);
@@ -119,6 +130,10 @@ export async function deleteTask(taskId: string, projectId: string) {
 
   // TODO: 10. Delete the task whose displayId is `taskId`
 
+  await db
+  .delete(tasksTable)
+  .where(eq(tasksTable.id,  parseInt(taskId, 10)))
+  .returning();
   // TODO: 10. end
 
   revalidatePath(`/projects/${projectId}`);

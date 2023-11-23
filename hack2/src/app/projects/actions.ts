@@ -65,7 +65,9 @@ export async function createProject(
   });
 
   // TODO: 6. Update the navbar for the user's projects
-
+  const newId = newProject.id;
+  revalidatePath(`/projects/${newId}`);
+  redirect(`/projects/${newId}`);
   // TODO: 6. end
 
   return newProject;
